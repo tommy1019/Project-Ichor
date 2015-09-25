@@ -6,51 +6,46 @@ using namespace std;
 
 int main(int argc, char ** argv)
 {
-  cout << "Project Ichor v0.0.0 Starting up...\n";
-  if (SDL_Init(SDL_INIT_VIDEO) != 0)
-  {
-    cout << "SDL_Init Error: " << SDL_GetError() << endl;
-    return 1;
-  }
+    cout << "Project Ichor v0.0.0 Starting up...\n";
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
+        cout << "SDL_Init Error: " << SDL_GetError() << endl;
+        return 1;
+    }
 
-  SDL_Window* displayWindow;
-  SDL_Renderer* displayRenderer;
-  SDL_RendererInfo displayRendererInfo; 
- 
-  SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_OPENGL, &displayWindow, &displayRenderer);
-  SDL_GetRendererInfo(displayRenderer, &displayRendererInfo);
+    SDL_Window* win;
+    win = SDL_CreateWindow("SDL Application", 100, 100, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
-  if ((displayRendererInfo.flags & SDL_RENDERER_ACCELERATED) == 0 || (displayRendererInfo.flags & SDL_RENDERER_TARGETTEXTURE) == 0)
-  {
-    std::cout << "Error no opengl\n";
-    return 1;
-  }
+    SDL_GLContext context;
+    context = SDL_GL_CreateContext(win);
 
-  bool running = true;
-  SDL_Event e;
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+    bool running = true;
+    SDL_Event e;
     
-  while (running)
-  {
-    SDL_PollEvent(&e);
+    while (running)
+    {
+        SDL_PollEvent(&e);
       
-     if (e.type == SDL_QUIT)
-     {
-       running = false;
-     }
+         if (e.type == SDL_QUIT)
+         {
+             running = false;
+         }
     
-    glLoadIdentity();
-    glClearColor(0.0f, 0.5f, 0.5f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+         glLoadIdentity();
+         glClearColor(0.0f, 0.5f, 0.5f, 0.0f);
+         glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(0.0f, 0.0f, 1.0f);
+         glColor3f(0.0f, 0.0f, 1.0f);
     
-    glBegin(GL_TRIANGLES);
-    glVertex3f(-1,0,0);
-    glVertex3f(1,0,0);
-    glVertex3f(0,1,0);
-    glEnd();
+         glBegin(GL_TRIANGLES);
+         glVertex3f(-1,0,0);
+         glVertex3f(1,0,0);
+         glVertex3f(0,1,0);
+         glEnd();
 
-    SDL_RenderPresent(displayRenderer);
-  } 
-  SDL_Quit();
+         SDL_GL_SwapWindow(win);
+    } 
+    SDL_Quit();
 }

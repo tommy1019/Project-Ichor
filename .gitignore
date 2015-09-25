@@ -1,5 +1,9 @@
 #Executable
 ichor
+*.exe
+*.manifest
 
 #Object files
 *.o
+
+

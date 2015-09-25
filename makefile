@@ -6,7 +6,7 @@ LL=g++
 OUTPUT=-o ichor
 CFLAGS=-c -Wall -Isdl/osx/SDL2.framework/Headers
 LFLAGS=-Wall -Fsdl/osx/ -framework SDL2 -framework OpenGL
-OFLAG=-c 
+OFLAG=-o  
 OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 SOURCES=$(wildcard src/*.cpp)
 else
