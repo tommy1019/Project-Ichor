@@ -6,4 +6,4 @@ ichor
 #Object files
 *.o
 
-
+*.swp

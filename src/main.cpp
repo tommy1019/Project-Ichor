@@ -3,6 +3,7 @@
 #include <SDL_opengl.h>
 
 #include "Window.h"
+#include "Vector3f.h"
 
 using namespace std;
 
@@ -14,6 +15,12 @@ int main(int argc, char ** argv)
 
     bool running = true;
     SDL_Event e;
+
+    Vector3f a = Vector3f(1,2,3);
+    Vector3f b = Vector3f(4,5,6);
+    Vector3f c = a + b;
+
+    cout << "(" << c.x << "," << c.y << "," << c.z << ")\n";
     
     while (running)
     {
