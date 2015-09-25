@@ -6,6 +6,7 @@ using namespace std;
 
 int main(int argc, char ** argv)
 {
+  cout << "Project Ichor v0.0.0 Starting up...\n";
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
     cout << "SDL_Init Error: " << SDL_GetError() << endl;
@@ -50,7 +51,6 @@ int main(int argc, char ** argv)
     glEnd();
 
     SDL_RenderPresent(displayRenderer);
-
   } 
   SDL_Quit();
 }

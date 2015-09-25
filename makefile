@@ -1,24 +1,30 @@
 OS=$(shell uname)
 
-CC=g++
-SOURCES=$(wildcard src/*.cpp)
-OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
-
 ifeq ($(OS),Darwin)
-OUTPUT=ichor
+CC=g++
+LL=g++
+OUTPUT=-o ichor
 CFLAGS=-c -Wall -Isdl/osx/SDL2.framework/Headers
 LFLAGS=-Wall -Fsdl/osx/ -framework SDL2 -framework OpenGL
+OFLAG=-c 
+OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
+SOURCES=$(wildcard src/*.cpp)
 else
-OUTPUT=ichor.exe
-CFLAGS=-c -Wall -Isdl/windows/include
-LFLAGS=-Wall -Lsdl/windows/lib/x64 -lSDL -lSDLmain -lopengl32
+CC=cl
+LL=link
+OUTPUT=/out:ichor.exe
+CFLAGS=/Wall /I"sdl\windows\x86_64-w64-mingw32\include\SDL2" /c #-IC:\Program Files\Microsoft SDKs\Windows\v7.1\Include
+LFLAGS=/LIBPATH:"sdl/windows/lib/x86" SDL2.lib SDL2main.lib OpenGL32.lib /SUBSYSTEM:CONSOLE # -lSDL -lSDLmain -lopengl32
+OFLAG=/Fo
+OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
+SOURCES=$(wildcard src/*.cpp)
 endif
 
 ichor: $(OBJECTS)
-	$(CC) $(LFLAGS) -o $(OUTPUT) $(OBJECTS)
+	$(LL) $(LFLAGS) $(OUTPUT) $(OBJECTS)
 
 $(OBJECTS) : build/%.o: src/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(OFLAG)$@ $< 
 
 clean:
 	rm /build/*o
