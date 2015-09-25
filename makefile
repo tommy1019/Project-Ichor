@@ -13,8 +13,8 @@ else
 CC=cl
 LL=link
 OUTPUT=/out:ichor.exe
-CFLAGS=/Wall /I"sdl\windows\x86_64-w64-mingw32\include\SDL2" /c #-IC:\Program Files\Microsoft SDKs\Windows\v7.1\Include
-LFLAGS=/LIBPATH:"sdl/windows/lib/x86" SDL2.lib SDL2main.lib OpenGL32.lib /SUBSYSTEM:CONSOLE # -lSDL -lSDLmain -lopengl32
+CFLAGS=/Wall /I"sdl\windows\include" /c
+LFLAGS=/LIBPATH:"sdl/windows/lib/x86" SDL2.lib SDL2main.lib OpenGL32.lib /SUBSYSTEM:CONSOLE
 OFLAG=/Fo
 OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 SOURCES=$(wildcard src/*.cpp)
