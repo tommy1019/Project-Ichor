@@ -47,4 +47,6 @@ int main(int argc, char ** argv)
     } 
 
     window.destroy();
+
+    return 0;
 }
