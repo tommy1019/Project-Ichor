@@ -1,11 +1,19 @@
 #include <iostream>
+#include <string>
+#include <chrono>
+
 #include <SDL.h>
 #include <SDL_opengl.h>
 
 #include "Window.h"
 #include "Vector3f.h"
+#include "Program.h"
+#include "Shader.h"
+#include "Mesh.h"
 
 using namespace std;
+
+Program* program;
 
 int main(int argc, char ** argv)
 {
@@ -13,37 +21,61 @@ int main(int argc, char ** argv)
 
     Window window = Window(800, 600);
 
+    Shader vertexShader = Shader("basic_vertex.vs", Shader::VERTEX_SHADER);   
+    Shader fragmentShader = Shader("basic_fragment.fs", Shader::FRAGMENT_SHADER);   
+    
+    program = new Program(vertexShader, fragmentShader);
+
+    Mesh mesh = Mesh("monkey.obj");
+
     bool running = true;
     SDL_Event e;
 
-    Vector3f a = Vector3f(1,2,3);
-    Vector3f b = Vector3f(4,5,6);
-    Vector3f c = a + b;
+    long cur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+    long last = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 
-    cout << "(" << c.x << "," << c.y << "," << c.z << ")\n";
-    
+    int frameCount = 0;
+    long elapsed = 0;
+    long second = 1000;
+
     while (running)
     {
         SDL_PollEvent(&e);
-      
-         if (e.type == SDL_QUIT)
-         {
-             running = false;
-         }
-    
-         glLoadIdentity();
-         glClearColor(0.0f, 0.5f, 0.5f, 0.0f);
-         glClear(GL_COLOR_BUFFER_BIT);
 
-         glColor3f(0.0f, 0.0f, 1.0f);
-    
-         glBegin(GL_TRIANGLES);
-         glVertex3f(-1,0,0);
-         glVertex3f(1,0,0);
-         glVertex3f(0,1,0);
-         glEnd();
+        cur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+        int delta = cur - last;
+        last = cur;
 
-         window.swapWindow();
+        frameCount++;
+        elapsed += delta;
+        if (elapsed > second)
+        {
+            cout << frameCount << " fps\n";
+            elapsed = 0;
+            frameCount = 0;
+        }
+
+        if (e.type == SDL_QUIT)
+        {
+            running = false;
+        }
+    
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(program->programPtr);
+
+        glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexPtr);
+        glEnableVertexAttribArray(program->vertexAttrib);
+        glVertexAttribPointer(program->vertexAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), NULL);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indicePtr);
+
+        glDrawElements(GL_TRIANGLES, mesh.numIndicies, GL_UNSIGNED_INT, NULL);
+
+        glDisableVertexAttribArray(0);
+        glUseProgram(NULL);
+
+        window.swapWindow();
     } 
 
     window.destroy();
