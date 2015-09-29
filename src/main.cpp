@@ -2,6 +2,7 @@
 #include <string>
 #include <chrono>
 
+#include <gl/glew.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -21,12 +22,26 @@ int main(int argc, char ** argv)
 
     Window window = Window(800, 600);
 
+    glewExperimental = GL_TRUE; 
+    GLenum glewError = glewInit();
+    if( glewError != GLEW_OK )
+    {
+        printf( "Error initializing GLEW! %s\n", glewGetErrorString( glewError ) );
+    }
+
     Shader vertexShader = Shader("basic_vertex.vs", Shader::VERTEX_SHADER);   
     Shader fragmentShader = Shader("basic_fragment.fs", Shader::FRAGMENT_SHADER);   
     
     program = new Program(vertexShader, fragmentShader);
 
-    Mesh mesh = Mesh("monkey.obj");
+    Mesh mesh = Mesh("monkeySmooth.obj");
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    glEnable(GL_CULL_FACE);
+
+    glShadeModel(GL_SMOOTH);
 
     bool running = true;
     SDL_Event e;
@@ -60,19 +75,23 @@ int main(int argc, char ** argv)
             running = false;
         }
     
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(program->programPtr);
 
+        glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexPtr);
-        glEnableVertexAttribArray(program->vertexAttrib);
-        glVertexAttribPointer(program->vertexAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), NULL);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, mesh.normalPtr);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indicePtr);
-
         glDrawElements(GL_TRIANGLES, mesh.numIndicies, GL_UNSIGNED_INT, NULL);
 
         glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
         glUseProgram(NULL);
 
         window.swapWindow();

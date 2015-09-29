@@ -4,8 +4,8 @@ ifeq ($(OS),Darwin)
 CC=g++
 LL=g++
 OUTPUT=-o ichor
-CFLAGS=-c -Wall -Isdl/osx/SDL2.framework/Headers
-LFLAGS=-Wall -Fsdl/osx/ -framework SDL2 -framework OpenGL
+CFLAGS=-c -Wall -Ilib/osx/SDL2.framework/Headers
+LFLAGS=-Wall -Flib/osx/ -framework SDL2 -framework OpenGL lib/osx/libGLEW.1.12.0.dylib
 OFLAG=-o  
 OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 SOURCES=$(wildcard src/*.cpp)
@@ -13,8 +13,8 @@ else
 CC=cl
 LL=link
 OUTPUT=/out:ichor.exe
-CFLAGS=/Wall /I"sdl\windows\include" /c
-LFLAGS=/LIBPATH:"sdl/windows/lib/x86" SDL2.lib SDL2main.lib OpenGL32.lib /SUBSYSTEM:CONSOLE
+CFLAGS=/Wall /I"lib\windows\include" /c
+LFLAGS=/LIBPATH:"lib/windows/lib/x86" SDL2.lib SDL2main.lib OpenGL32.lib glew32.lib /SUBSYSTEM:CONSOLE
 OFLAG=/Fo
 OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 SOURCES=$(wildcard src/*.cpp)

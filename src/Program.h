@@ -9,7 +9,6 @@ class Program
 {
     public:
         GLuint programPtr;
-        GLint vertexAttrib;
 
         Program(Shader vs, Shader fs);
     private:

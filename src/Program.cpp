@@ -17,13 +17,6 @@ Program::Program(Shader vs, Shader fs)
         printProgramLog();
         throw 1;
     }
-
-    vertexAttrib = glGetAttribLocation(programPtr, "vertex");
-    if (vertexAttrib == -1)
-    {
-        printf("Error getting attrib location");
-        throw 1;
-    }
 }
 
 void Program::printProgramLog()
