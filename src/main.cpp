@@ -1,3 +1,8 @@
+/*
+@Authors Tommy,Bryce
+@Version 0.0  
+@Date September/21/2015
+*/
 #include <iostream>
 #include <string>
 #include <chrono>
