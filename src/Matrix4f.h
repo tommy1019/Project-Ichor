@@ -9,7 +9,7 @@ class Matrix4f
         const float* operator[](int index) const;
         float* operator[](int index);
 
-        inline Matrix4f operator*(const Matrix4f& right) const;
+        inline Matrix4f operator*(const Matrix4f &b) const;	
 };
 
 #endif
