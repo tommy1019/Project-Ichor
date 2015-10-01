@@ -14,6 +14,7 @@
 #include "Program.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "Texture.h"
 
 using namespace std;
 
@@ -41,7 +42,8 @@ int main(int argc, char ** argv)
     
     program = new Program(vertexShader, fragmentShader);
 
-    Mesh mesh = Mesh("monkeySmooth.obj");
+    Mesh mesh = Mesh("monkeyTexture.obj");
+    Texture texture = Texture("test.png");
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -86,6 +88,10 @@ int main(int argc, char ** argv)
 
         glUseProgram(program->programPtr);
 
+        glActiveTexture(GL_TEXTURE0);
+        glUniform1i(0, 0);
+        glBindTexture(GL_TEXTURE_2D, texture.texturePtr);
+
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexPtr);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
@@ -93,6 +99,10 @@ int main(int argc, char ** argv)
         glEnableVertexAttribArray(1);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.normalPtr);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, mesh.texturePtr);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), NULL);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indicePtr);
         glDrawElements(GL_TRIANGLES, mesh.numIndicies, GL_UNSIGNED_INT, NULL);

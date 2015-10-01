@@ -12,9 +12,12 @@ Mesh::Mesh(std::string fileName)
 
     std::vector<Vector3f> verticeTemp;
     std::vector<Vector3f> normalTemp;
+    std::vector<Vector2f> textureTemp;
 
     std::vector<Vector3f> verticies;
     std::vector<Vector3f> normals;
+    std::vector<Vector2f> textures;
+
     std::vector<GLuint> indicies;
 
     std::vector<Vertex> vertexes;
@@ -45,18 +48,29 @@ Mesh::Mesh(std::string fileName)
 
             normalTemp.push_back(v);
         }
+        if (curLine.substr(0, 2) == "vt")
+        {
+            std::istringstream s(curLine.substr(2));
+            Vector2f v;
+
+            s >> v.x;
+            s >> v.y;
+
+            textureTemp.push_back(v);
+        }
         if (curLine.substr(0, 2) == "f ")
         {
             GLuint pA, pB, pC;
             GLuint nA, nB, nC;
-            
+            GLuint tA, tB, tC;
+
             //TODO: load textures
 
-            sscanf(curLine.substr(2).c_str(), "%i//%i %i//%i %i//%i", &pA, &nA, &pB, &nB, &pC, &nC);
+            sscanf(curLine.substr(2).c_str(), "%i/%i/%i %i/%i/%i %i/%i/%i", &pA, &tA, &nA, &pB, &tB, &nB, &pC, &tC, &nC);
 
-            Vertex a(verticeTemp[pA - 1], normalTemp[nA - 1]);
-            Vertex b(verticeTemp[pB - 1], normalTemp[nB - 1]);
-            Vertex c(verticeTemp[pC - 1], normalTemp[nC - 1]);
+            Vertex a(verticeTemp[pA - 1], normalTemp[nA - 1], textureTemp[tA - 1]);
+            Vertex b(verticeTemp[pB - 1], normalTemp[nB - 1], textureTemp[tB - 1]);
+            Vertex c(verticeTemp[pC - 1], normalTemp[nC - 1], textureTemp[tC - 1]);
 
             if (vertexMap.find(a) == vertexMap.end())
             {
@@ -101,6 +115,7 @@ Mesh::Mesh(std::string fileName)
         Vertex v = vertexes[i];
         verticies.push_back(v.p);
         normals.push_back(v.n);
+        textures.push_back(v.t);
     }
 
     glGenBuffers(1, &vertexPtr);
@@ -110,6 +125,10 @@ Mesh::Mesh(std::string fileName)
     glGenBuffers(1, &normalPtr);
     glBindBuffer(GL_ARRAY_BUFFER, normalPtr);
     glBufferData(GL_ARRAY_BUFFER, 3 * normals.size() * sizeof(float), normals.data(), GL_STATIC_DRAW);
+
+    glGenBuffers(1, &texturePtr);
+    glBindBuffer(GL_ARRAY_BUFFER, texturePtr);
+    glBufferData(GL_ARRAY_BUFFER, 2 * textures.size() * sizeof(float), textures.data(), GL_STATIC_DRAW);
 
     glGenBuffers(1, &indicePtr);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicePtr);

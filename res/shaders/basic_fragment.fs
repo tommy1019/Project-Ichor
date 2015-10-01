@@ -1,5 +1,8 @@
+uniform sampler2D tex;
+
 varying vec3 pos;
 varying vec3 normal;
+varying vec2 texCoord;
 
 void main()
 {
@@ -9,5 +12,5 @@ void main()
     float cosTheta = max(0.0, dot(n,l)) * 0.6;
 
     //gl_FragColor = vec4(normal, 1.0);
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0) * cosTheta + vec4(0.1, 0.1, 0.1, 1.0);
+    gl_FragColor = (texture2D(tex, texCoord));// * vec4(1.0, 1.0, 1.0, 1.0) * cosTheta + vec4(0.1, 0.1, 0.1, 1.0);
 }

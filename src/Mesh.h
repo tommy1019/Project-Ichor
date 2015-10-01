@@ -10,12 +10,14 @@
 #include <gl/glew.h>
 
 #include "Vector3f.h"
+#include "Vector2f.h"
 
 class Mesh
 {
     public:
         GLuint vertexPtr;
         GLuint normalPtr;
+        GLuint texturePtr;
         GLuint indicePtr;
 
         int numIndicies;
@@ -26,11 +28,13 @@ class Mesh
         {
             Vector3f p;
             Vector3f n;
+            Vector2f t;
 
-            Vertex(Vector3f p, Vector3f n)
+            Vertex(Vector3f p, Vector3f n, Vector2f t)
             {
                 this->p = p;
                 this->n = n;
+                this->t = t;
             };
 
             bool operator<(const Vertex& a) const
@@ -43,6 +47,9 @@ class Mesh
                 if (n.y != a.n.y) return n.y < a.n.y;
                 if (n.z != a.n.z) return n.z < a.n.z;
             
+                if (t.x != a.t.x) return t.x < a.t.x;
+                if (t.y != a.t.y) return t.y < a.t.y;
+
                 return true;
             };
         };
