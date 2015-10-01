@@ -10,6 +10,8 @@ class Matrix4f
         float* operator[](int index);
 
         inline Matrix4f operator*(const Matrix4f &b) const;	
+		
+		void initIdentity();
 };
 
 #endif

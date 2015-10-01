@@ -10,6 +10,17 @@ float* Matrix4f::operator[](int index)
     return a[index];
 }
 
+void Matrix4f::initIdentity()
+{
+    int a[4][4] =
+    {
+        {1,0,0,0},
+        {0,1,0,0},
+		{0,0,1,0},
+		{0,0,0,1}
+    };
+}
+
 inline Matrix4f Matrix4f::operator*(const Matrix4f &b) const
 {
 	Matrix4f c;
