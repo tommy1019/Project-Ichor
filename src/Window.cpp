@@ -4,10 +4,17 @@ Window::Window(int width, int height)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
-        std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        exit(1);
+        printf("SDL_Init Error: %s\n", SDL_GetError());
+        throw(1);
     }
     
+	int imgFlags = IMG_INIT_PNG;
+    if(!(IMG_Init( imgFlags ) & imgFlags ))
+    {
+        printf( "IMG_Init Error: %s\n", IMG_GetError() );
+        throw(1);
+    }
+	
     win = SDL_CreateWindow("Project Ichor", 100, 100, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
     context = SDL_GL_CreateContext(win);
 

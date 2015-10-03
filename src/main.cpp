@@ -92,7 +92,7 @@ int main(int argc, char ** argv)
         //glUniform1i(0, 1);
         glBindTexture(GL_TEXTURE_2D, texture.texturePtr);
 
-        temp += 0.05f;
+        temp += 0.005f;
 
         Matrix4f translation;
         translation.initTranslation(Vector3f(sin(temp), 0, 0));
