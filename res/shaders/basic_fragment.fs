@@ -12,5 +12,5 @@ void main()
     float cosTheta = max(0.0, dot(n,l)) * 0.6;
 
     //gl_FragColor = vec4(normal, 1.0);
-    gl_FragColor = (texture2D(tex, texCoord));// * vec4(1.0, 1.0, 1.0, 1.0) * cosTheta + vec4(0.1, 0.1, 0.1, 1.0);
+    gl_FragColor = (texture2D(tex, texCoord)) * cosTheta + vec4(0.1, 0.1, 0.1, 1.0);
 }

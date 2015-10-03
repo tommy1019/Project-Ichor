@@ -1,8 +1,3 @@
-/*
-@Authors Tommy,Bryce
-@Version 0.0  
-@Date September/21/2015
-*/
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -15,6 +10,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "Texture.h"
+#include "Matrix4f.h"
 
 using namespace std;
 
@@ -34,7 +30,7 @@ int main(int argc, char ** argv)
     GLenum glewError = glewInit();
     if( glewError != GLEW_OK )
     {
-        printf( "Error initializing GLEW! %s\n", glewGetErrorString( glewError ) );
+        printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
     }
 
     Shader vertexShader = Shader("basic_vertex.vs", Shader::VERTEX_SHADER);   
@@ -44,6 +40,8 @@ int main(int argc, char ** argv)
 
     Mesh mesh = Mesh("monkeyTexture.obj");
     Texture texture = Texture("test.png");
+    Matrix4f transform;
+    transform.initTranslation(Vector3f(0,0,-.5));
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -61,6 +59,8 @@ int main(int argc, char ** argv)
     int frameCount = 0;
     long elapsed = 0;
     long second = 1000;
+
+    float temp = 0;
 
     while (running)
     {
@@ -89,8 +89,20 @@ int main(int argc, char ** argv)
         glUseProgram(program->programPtr);
 
         glActiveTexture(GL_TEXTURE0);
-        glUniform1i(0, 0);
+        //glUniform1i(0, 1);
         glBindTexture(GL_TEXTURE_2D, texture.texturePtr);
+
+        temp += 0.05f;
+
+        Matrix4f translation;
+        translation.initTranslation(Vector3f(sin(temp), 0, 0));
+
+        Matrix4f scale;
+        scale.initScale(Vector3f(0.5, 0.5, 0.5));
+
+        transform = translation * scale;
+
+        glUniformMatrix4fv(glGetUniformLocation(program->programPtr, "transformMatrix"), 1, GL_FALSE, &(transform.a[0][0]));
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexPtr);

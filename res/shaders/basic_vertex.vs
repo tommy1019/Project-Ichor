@@ -4,15 +4,19 @@ attribute vec3 vertexIn;
 attribute vec3 normalIn;
 attribute vec2 textureIn;
 
+uniform mat4 transformMatrix;
+
 varying vec3 pos;
 varying vec3 normal;
 varying vec2 texCoord;
 
 void main(void)
 {
-    pos = vertexIn * vec3(0.5, 0.5, 0.5) + vec3(0.0, 0.0, -0.5);
+    vec4 posTemp = vec4(vertexIn, 1) * transformMatrix;
+
     normal = normalIn;
     texCoord = textureIn;    
+    pos = posTemp.xyz;
 
-    gl_Position = vec4(pos, 1.0);
+    gl_Position = posTemp;
 }
