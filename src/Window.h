@@ -2,9 +2,9 @@
 #define WINDOW_H
 
 #include <iostream>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <gl/glew.h>
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 class Window
 {

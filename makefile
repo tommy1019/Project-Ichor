@@ -4,8 +4,8 @@ ifeq ($(OS),Darwin)
 CC=g++
 LL=g++
 OUTPUT=-o ichor
-CFLAGS=-c -Wall -Ilib/osx/SDL2.framework/Headers
-LFLAGS=-Wall -Flib/osx/ -framework SDL2 -framework OpenGL -framework SDL2_image lib/osx/libGLEW.1.12.0.dylib
+CFLAGS=-c -Wall -I/usr/local/include
+LFLAGS=-Wall -L/usr/local/lib -lSDL2 -lSDL2_image -lglew -framework OpenGL
 OFLAG=-o  
 OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 SOURCES=$(wildcard src/*.cpp)
@@ -27,4 +27,5 @@ $(OBJECTS) : build/%.o: src/%.cpp
 	$(CC) $(CFLAGS) $(OFLAG)$@ $< 
 
 clean:
-	rm /build/*o
+	rm build/*.o
+	rm ichor
