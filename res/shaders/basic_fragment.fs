@@ -1,16 +1,23 @@
-uniform sampler2D tex;
+uniform sampler2D texture;
+uniform sampler2D normalMap;
 
-varying vec3 pos;
-varying vec3 normal;
-varying vec2 texCoord;
+varying vec3 posOut;
+varying vec3 normalOut;
+varying vec2 texCoordOut;
 
 void main()
 {
-    vec3 n = normal;
+    vec3 n = normalOut * (texture2D(normalMap, texCoordOut)).xyz;
     vec3 l = vec3(-1,1,1);
 
-    float cosTheta = max(0.0, dot(n,l)) * 0.6;
+    float distance = length(l - posOut);
 
-    //gl_FragColor = vec4(normal, 1.0);
-    gl_FragColor = (texture2D(tex, texCoord)) * cosTheta + vec4(0.1, 0.1, 0.1, 1.0);
+    float cosTheta = max(0.0, dot(n,l));
+
+    vec3 r = reflect(-l, n);
+    float cosAlpha = max(0.0, dot(vec3(0,0,0), r));
+
+    gl_FragColor = texture2D(texture, texCoordOut);//vec4(n, 1.0);
+
+//    gl_FragColor = (texture2D(texture, texCoordOut)) * ((cosTheta * 50.0 / (distance * distance)) + (pow(cosAlpha,5.0) * 50.0 / (distance * distance)) + vec4(0.1, 0.1, 0.1, 1.0));
 }

@@ -38,17 +38,30 @@ int main(int argc, char ** argv)
     
     program = new Program(vertexShader, fragmentShader);
 
-    Mesh mesh = Mesh("monkeyTexture.obj");
-    Texture texture = Texture("test.png");
+    Mesh mesh = Mesh("monkeyNormalMap.obj");
+    Texture texture = Texture("test_basetex.png");
+    Texture normalMap = Texture("normal.png");
     Matrix4f transform;
     transform.initTranslation(Vector3f(0,0,-.5));
 
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_TRUE);
 
     glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
 
     glShadeModel(GL_SMOOTH);
+
+    glUseProgram(program->programPtr);
+    GLuint texLoc = glGetUniformLocation(program->programPtr, "texture");
+    glUniform1i(texLoc, 0);
+    printf("%i\n", texLoc);
+    
+    texLoc = glGetUniformLocation(program->programPtr, "normalMap");
+    glUniform1i(texLoc, 1);
+    printf("%i\n", texLoc);
 
     bool running = true;
     SDL_Event e;
@@ -89,20 +102,31 @@ int main(int argc, char ** argv)
         glUseProgram(program->programPtr);
 
         glActiveTexture(GL_TEXTURE0);
-        //glUniform1i(0, 1);
         glBindTexture(GL_TEXTURE_2D, texture.texturePtr);
 
-        temp += 0.005f;
+    //    glActiveTexture(GL_TEXTURE1);
+    //    glBindTexture(GL_TEXTURE_2D, normalMap.texturePtr);
+
+        temp += 0.02;
 
         Matrix4f translation;
-        translation.initTranslation(Vector3f(sin(temp), 0, 0));
+        translation.initTranslation(Vector3f(cos(temp), 0, -10 + sin(temp)));
 
         Matrix4f scale;
-        scale.initScale(Vector3f(0.5, 0.5, 0.5));
+        scale.initScale(Vector3f(2, 2, 2));
 
-        transform = translation * scale;
+        Matrix4f rotation;
+        rotation.initRotation(Vector3f(0, cos(temp / 2), 0));
+
+        transform = translation * rotation * scale;
 
         glUniformMatrix4fv(glGetUniformLocation(program->programPtr, "transformMatrix"), 1, GL_FALSE, &(transform.a[0][0]));
+
+        Matrix4f projection;
+        projection.initProjection(800, 600, 70, 0.1f, 1000);
+        projection = projection * transform;
+
+        glUniformMatrix4fv(glGetUniformLocation(program->programPtr, "projectionMatrix"), 1, GL_FALSE, &(projection.a[0][0]));
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexPtr);
@@ -121,6 +145,7 @@ int main(int argc, char ** argv)
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
         glUseProgram(NULL);
 
         window.swapWindow();

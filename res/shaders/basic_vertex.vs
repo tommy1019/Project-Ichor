@@ -5,18 +5,17 @@ attribute vec3 normalIn;
 attribute vec2 textureIn;
 
 uniform mat4 transformMatrix;
+uniform mat4 projectionMatrix;
 
-varying vec3 pos;
-varying vec3 normal;
-varying vec2 texCoord;
+varying vec3 posOut;
+varying vec3 normalOut;
+varying vec2 texCoordOut;
 
 void main(void)
 {
-    vec4 posTemp = vec4(vertexIn, 1) * transformMatrix;
+    gl_Position = projectionMatrix * vec4(vertexIn, 1);
 
-    normal = normalIn;
-    texCoord = textureIn;    
-    pos = posTemp.xyz;
-
-    gl_Position = posTemp;
+    normalOut = (transformMatrix * vec4(normalIn, 0)).xyz;
+    texCoordOut = textureIn;    
+    posOut = (transformMatrix * vec4(vertexIn, 1)).xyz;
 }
