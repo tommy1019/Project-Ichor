@@ -38,8 +38,8 @@ int main(int argc, char ** argv)
     
     program = new Program(vertexShader, fragmentShader);
 
-    Mesh mesh = Mesh("monkeyNormalMap.obj");
-    Texture texture = Texture("test_basetex.png");
+    Mesh mesh = Mesh("monkey.obj");
+    Texture texture = Texture("test.png");
     Texture normalMap = Texture("normal.png");
     Matrix4f transform;
     transform.initTranslation(Vector3f(0,0,-.5));
@@ -55,13 +55,14 @@ int main(int argc, char ** argv)
     glShadeModel(GL_SMOOTH);
 
     glUseProgram(program->programPtr);
+    
     GLuint texLoc = glGetUniformLocation(program->programPtr, "texture");
     glUniform1i(texLoc, 0);
-    printf("%i\n", texLoc);
+    printf("Texture Loc: %i\n", texLoc);
     
-    texLoc = glGetUniformLocation(program->programPtr, "normalMap");
-    glUniform1i(texLoc, 1);
-    printf("%i\n", texLoc);
+    GLuint normalLoc = glGetUniformLocation(program->programPtr, "normalMap");
+    glUniform1i(normalLoc, 1);
+    printf("Normal Loc: %i\n", normalLoc);
 
     bool running = true;
     SDL_Event e;
@@ -103,9 +104,11 @@ int main(int argc, char ** argv)
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.texturePtr);
+        glUniform1i(texLoc, 0);
 
-    //    glActiveTexture(GL_TEXTURE1);
-    //    glBindTexture(GL_TEXTURE_2D, normalMap.texturePtr);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, normalMap.texturePtr);
+        glUniform1i(normalLoc, 1);
 
         temp += 0.02;
 
