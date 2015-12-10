@@ -110,7 +110,7 @@ Mesh::Mesh(std::string fileName)
 
     numIndicies = indicies.size();
 
-    for(int i = 0; i < vertexes.size(); i++)
+    for(uint i = 0; i < vertexes.size(); i++)
     {
         Vertex v = vertexes[i];
         verticies.push_back(v.p);

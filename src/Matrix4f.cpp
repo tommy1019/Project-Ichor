@@ -58,7 +58,7 @@ void Matrix4f::initRotation(Vector3f b)
     rz.a[0][2] = 0;         rz.a[1][2] = 0;             rz.a[2][2] = 1; rz.a[3][2] = 0;
     rz.a[0][3] = 0;         rz.a[1][3] = 0;             rz.a[2][3] = 0; rz.a[3][3] = 1;
 
-    *this = rx * ry * rx;
+    *this = rx * ry * rz;
 }
 
 void Matrix4f::initProjection(float width, float height, float fov, float near, float far)
