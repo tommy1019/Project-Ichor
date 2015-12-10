@@ -5,7 +5,17 @@ CC=g++
 LL=g++
 OUTPUT=-o ichor
 CFLAGS=-c -Wall -I/usr/local/include
-LFLAGS=-Wall -L/usr/local/lib -lSDL2 -lSDL2_image -lglew -framework OpenGL
+LFLAGS=-Wall -L/usr/local/lib -lSDL2 -lSDL2_image -lGLEW -framework OpenGL
+OFLAG=-o  
+OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
+SOURCES=$(wildcard src/*.cpp)
+else
+ifeq ($(OS),Linux)
+CC=g++
+LL=g++
+OUTPUT=-o ichor
+CFLAGS=-c -Wall -I/usr/include -std=c++11
+LFLAGS=-Wall -L/usr/lib -lSDL2 -lSDL2_image -lGLEW -lGL 
 OFLAG=-o  
 OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 SOURCES=$(wildcard src/*.cpp)
@@ -19,9 +29,10 @@ OFLAG=/Fo
 OBJECTS=$(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 SOURCES=$(wildcard src/*.cpp)
 endif
+endif
 
 ichor: $(OBJECTS)
-	$(LL) $(LFLAGS) $(OUTPUT) $(OBJECTS)
+	$(LL) $(OUTPUT) $(OBJECTS) $(LFLAGS)
 
 $(OBJECTS) : build/%.o: src/%.cpp
 	$(CC) $(CFLAGS) $(OFLAG)$@ $< 

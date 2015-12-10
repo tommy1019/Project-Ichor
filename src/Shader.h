@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 class Shader
 {

@@ -2,7 +2,7 @@
 #include <string>
 #include <chrono>
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include "Window.h"
 #include "Vector3f.h"
@@ -149,7 +149,7 @@ int main(int argc, char ** argv)
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);
-        glUseProgram(NULL);
+        glUseProgram(0);
 
         window.swapWindow();
     } 

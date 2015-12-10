@@ -7,7 +7,7 @@
 #include <sstream>
 #include <map>
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include "Vector3f.h"
 #include "Vector2f.h"

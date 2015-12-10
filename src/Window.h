@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <SDL2/SDL.h>
-#include <gl/glew.h>
+#include <GL/glew.h>
 #include <SDL2/SDL_image.h>
 
 class Window

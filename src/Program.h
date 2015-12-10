@@ -1,7 +1,7 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include "Shader.h"
 
