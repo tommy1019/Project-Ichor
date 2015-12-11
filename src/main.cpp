@@ -39,8 +39,8 @@ int main(int argc, char ** argv)
     program = new Program(vertexShader, fragmentShader);
 
     Mesh mesh = Mesh("monkey.obj");
-    Texture texture = Texture("test.png");
-    Texture normalMap = Texture("normal.png");
+    Texture texture = Texture("brickTexture.png");
+    Texture normalMap = Texture("brickNormal.png");
     Matrix4f transform;
     transform.initTranslation(Vector3f(0,0,-.5));
 
