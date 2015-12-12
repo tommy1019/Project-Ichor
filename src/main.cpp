@@ -38,9 +38,9 @@ int main(int argc, char ** argv)
     
     program = new Program(vertexShader, fragmentShader);
 
-    Mesh mesh = Mesh("monkey.obj");
-    Texture texture = Texture("brickTexture.png");
-    Texture normalMap = Texture("brickNormal.png");
+    Mesh mesh = Mesh("tommySucks.obj");
+    Texture texture = Texture("textureMap.png");
+    Texture normalMap = Texture("normalMap.png");
     Matrix4f transform;
     transform.initTranslation(Vector3f(0,0,-.5));
 
@@ -63,6 +63,14 @@ int main(int argc, char ** argv)
     GLuint normalLoc = glGetUniformLocation(program->programPtr, "normalMap");
     glUniform1i(normalLoc, 1);
     printf("Normal Loc: %i\n", normalLoc);
+
+    int vertexAttribLoc = glGetAttribLocation(program->programPtr, "vertex");
+    int normalAttribLoc = glGetAttribLocation(program->programPtr, "normal");
+    int texCoordAttribLoc = glGetAttribLocation(program->programPtr, "texCoord");
+
+    printf("Vertex attrib loc: %i\n", vertexAttribLoc);
+    printf("Normal attrib loc: %i\n", normalAttribLoc);
+    printf("TexCoord attrib loc: %i\n", texCoordAttribLoc);
 
     bool running = true;
     SDL_Event e;
@@ -116,10 +124,10 @@ int main(int argc, char ** argv)
         translation.initTranslation(Vector3f(cos(temp), 0, -10 + sin(temp)));
 
         Matrix4f scale;
-        scale.initScale(Vector3f(2, 2, 2));
+        scale.initScale(Vector3f(1, 1, 1));
 
         Matrix4f rotation;
-        rotation.initRotation(Vector3f(0, cos(temp / 2), 0));
+        rotation.initRotation(Vector3f(90, cos(temp / 2), 0));
 
         transform = translation * rotation * scale;
 
@@ -131,24 +139,24 @@ int main(int argc, char ** argv)
 
         glUniformMatrix4fv(glGetUniformLocation(program->programPtr, "projectionMatrix"), 1, GL_FALSE, &(projection.a[0][0]));
 
-        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(vertexAttribLoc);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexPtr);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+        glVertexAttribPointer(vertexAttribLoc, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
 
-        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(normalAttribLoc);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.normalPtr);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+        glVertexAttribPointer(normalAttribLoc, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
 
-        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(texCoordAttribLoc);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.texturePtr);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), NULL);
+        glVertexAttribPointer(texCoordAttribLoc, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), NULL);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indicePtr);
         glDrawElements(GL_TRIANGLES, mesh.numIndicies, GL_UNSIGNED_INT, NULL);
 
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(vertexAttribLoc);
+        glDisableVertexAttribArray(normalAttribLoc);
+        glDisableVertexAttribArray(texCoordAttribLoc);
         glUseProgram(0);
 
         window.swapWindow();

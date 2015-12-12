@@ -1,21 +1,21 @@
 #version 120
 
-attribute vec3 vertexIn;
-attribute vec3 normalIn;
-attribute vec2 textureIn;
+attribute vec3 vertex;
+attribute vec3 normal;
+attribute vec2 texCoord;
 
 uniform mat4 transformMatrix;
 uniform mat4 projectionMatrix;
 
-varying vec3 posOut;
-varying vec3 normalOut;
-varying vec2 texCoordOut;
+varying vec3 vPos;
+varying vec3 vNormal;
+varying vec2 vTexCoord;
 
 void main(void)
 {
-    gl_Position = projectionMatrix * vec4(vertexIn, 1);
+    gl_Position = projectionMatrix * vec4(vertex, 1);
 
-    normalOut = (transformMatrix * vec4(normalIn, 0)).xyz;
-    texCoordOut = textureIn;    
-    posOut = (transformMatrix * vec4(vertexIn, 1)).xyz;
+    vNormal = (transformMatrix * vec4(normal, 0)).xyz;
+    vTexCoord = vec2(texCoord.x, -texCoord.y);; 
+    vPos = (transformMatrix * vec4(vertex, 1)).xyz;
 }

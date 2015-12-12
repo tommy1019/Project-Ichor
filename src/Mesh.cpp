@@ -64,8 +64,6 @@ Mesh::Mesh(std::string fileName)
             GLuint nA, nB, nC;
             GLuint tA, tB, tC;
 
-            //TODO: load textures
-
             sscanf(curLine.substr(2).c_str(), "%i/%i/%i %i/%i/%i %i/%i/%i", &pA, &tA, &nA, &pB, &tB, &nB, &pC, &tC, &nC);
 
             Vertex a(verticeTemp[pA - 1], normalTemp[nA - 1], textureTemp[tA - 1]);

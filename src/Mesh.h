@@ -46,7 +46,7 @@ class Mesh
                 if (n.x != a.n.x) return n.x < a.n.x;
                 if (n.y != a.n.y) return n.y < a.n.y;
                 if (n.z != a.n.z) return n.z < a.n.z;
-            
+
                 if (t.x != a.t.x) return t.x < a.t.x;
                 if (t.y != a.t.y) return t.y < a.t.y;
 
