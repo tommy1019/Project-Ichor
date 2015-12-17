@@ -10,27 +10,23 @@ varying vec2 vTexCoord;
 void main()
 {
     vec3 eyePos = vec3(0, 0, 0);
-    vec3 lightPos = vec3(-1, 1, 1);
+    vec3 lightDirection = normalize(vec3(0, 0, 1));
 
-    vec3 finalNormal = vNormal;// * texture2D(normalMap, vTexCoord).xyz;
+    vec3 finalNormal = vNormal * texture2D(normalMap, vTexCoord).xyz;
     vec4 surfaceColor = texture2D(texture, vTexCoord);
-    vec3 surfaceToLight = normalize(lightPos - vPos);
 
-    float diffuseFactor = clamp(dot(finalNormal, surfaceToLight), 0, 1);
-    
-    vec3 vertexToEye = normalize(eyePos - vPos);
-    vec3 reflected = normalize(reflect(-surfaceToLight, finalNormal));
-    float specularFactor = max(dot(vertexToEye, reflected), 0);
-
+    float diffuseFactor = clamp(dot(finalNormal, lightDirection), 0, 1);
+  
+    vec3 eyeDir = normalize(eyePos - vPos); 
+    vec3 reflect = normalize(reflect(lightDirection, finalNormal));
+    float specular = dot(eyeDir, reflect);
+ 
     vec4 pixelBrightness = diffuseFactor * vec4(1.0, 1.0, 1.0, 1.0) + vec4(0.1, 0.1, 0.1, 0.1);
  
-    if (specularFactor > 0)
+    if (specular > 0)
     {
-        specularFactor = pow(specularFactor, 64);
-        pixelBrightness *= specularFactor; 
-
-        gl_FragColor = vec4(0, 0, 1, 1) * specularFactor;
+        pixelBrightness += pow(specular, 128) * vec4(1.0, 1.0, 1.0, 1.0);
     }
 
-    //gl_FragColor = pixelBrightness * surfaceColor;
+    gl_FragColor = pixelBrightness * surfaceColor;
 }

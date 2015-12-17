@@ -16,6 +16,6 @@ void main(void)
     gl_Position = projectionMatrix * vec4(vertex, 1);
 
     vNormal = (transformMatrix * vec4(normal, 0)).xyz;
-    vTexCoord = vec2(texCoord.x, -texCoord.y);; 
+    vTexCoord = vec2(texCoord.x, -texCoord.y); 
     vPos = (transformMatrix * vec4(vertex, 1)).xyz;
 }
